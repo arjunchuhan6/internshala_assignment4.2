@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async-Await Function</title>
+    <style>
+        body {
+            margin: 0;
+            width: 100%;
+            height: 100vh;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            background: rgb(63, 94, 251);
+            background: linear-gradient(198deg, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            min-height: 25rem;
+        }
+
+        #btn {
+            background: pink;
+            outline: none;
+            border-radius: 20px;
+            outline: none;
+            border: 2px solid green;
+            transition: 0.5s all;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        #inner {
+            background: lightblue;
+            box-shadow: 12px 12px 12px #00000222;
+            padding: 1rem;
+            min-height: 1rem;
+            max-height: 25rem;
+            width: 25rem;
+            overflow-y: scroll;
+            display: none;
+        }
+
+        .inner-para {
+            background: #00b7ff;
+            margin: 0.4rem;
+            padding: 0.4rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <button id="btn">Async-Await</button>
+        <div id="inner">
+            <p class="inner-para"></p>
+        </div>
+    </div>
+    <script>
+        //selecting the element of dom
+        const btn = document.querySelector("#btn");
+        const para = document.querySelector(".inner-para");
+        const data = document.querySelector("#inner");
+        //to store data creating array
+        let datacoll = [];
+
+        //event listner
+        btn.addEventListener("click", () => {
+            para.textContent = "Loading.....";
+            data.style.display = "block";
+            calldata();
+        });
+        // fatching data from web api
+        const calldata = async () => {
+            try {
+                const res = await fetch("https://dummyjson.com/todos");
+                const calldata = await res.json();
+                datacoll = calldata.todos;
+                setdata();
+            } catch (error) {
+                console.log(error);
+                para.textContent = `${error}`
+            }
+        };
+        //function to set the data to the div
+        function setdata() {
+            if (datacoll.length !== 0) {
+                data.innerHTML = "";
+                datacoll.map((item, index) => {
+                    const content = document.createElement("p");
+                    content.classList.add("inner-para");
+                    content.innerHTML = `${item.todo}`;
+                    data.appendChild(content);
+                });
+            };
+        };
+    </script>
+</body>
+
+</html>
